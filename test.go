@@ -101,7 +101,7 @@ func (test *Test) ReconnectPeer(id int) {
 }
 
 func (test *Test) CheckSingleLeader() (int, int) {
-	// Trys for leader can be adjusted.
+	// Num of Trys for leader can be adjusted.
 	for try := 0; try < 5; try++ {
 		leaderId := -1
 		leaderTerm := -1

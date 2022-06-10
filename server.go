@@ -1,5 +1,7 @@
 package raft
 
+// Attribution goes to https://github.com/eliben/raft for most of this code.
+
 import (
 	"fmt"
 	"log"
@@ -11,12 +13,6 @@ import (
 	"time"
 )
 
-// Server wraps a raft.Raft along with a rpc.Server that exposes its
-// methods as RPC endpoints. It also manages the peers of the Raft server. The
-// main goal of this type is to simplify the code of raft.Server for
-// presentation purposes. raft.Raft has a *Server to do its peer
-// communication and doesn't have to worry about the specifics of running an
-// RPC server.
 type Server struct {
 	mu          sync.Mutex
 	serverId    int
@@ -44,8 +40,6 @@ func (s *Server) Serve() {
 	s.mu.Lock()
 	s.raft = NewRaft(s.serverId, s.peerIds, s)
 
-	// Create a new RPC server and register a RPCProxy that forwards all methods
-	// to n.raft
 	s.rpcServer = rpc.NewServer()
 	s.rpcProxy = &RPCProxy{raft: s.raft}
 	s.rpcServer.RegisterName("Raft", s.rpcProxy)
@@ -81,7 +75,6 @@ func (s *Server) Serve() {
 	}()
 }
 
-// DisconnectAll closes all the client connections to peers for this server.
 func (s *Server) DisconnectAll() {
 	s.mu.Lock()
 	defer s.mu.Unlock()
