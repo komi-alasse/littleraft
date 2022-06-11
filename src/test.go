@@ -139,11 +139,11 @@ func (test *Test) CheckNoLeader() {
 	}
 }
 
-func (h *Test) SubmitToServer(serverId int, command interface{}) bool {
+func (h *Test) SubmitToServer(serverId int, command any) bool {
 	return h.cluster[serverId].raft.Submit(command)
 }
 
-func testlog(format string, a ...interface{}) {
+func testlog(format string, a ...any) {
 	format = "[TEST] " + format
 	log.Printf(format, a...)
 }

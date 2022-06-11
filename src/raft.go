@@ -9,7 +9,7 @@ import (
 const DEBUG bool = false
 
 type Commit struct {
-	Command interface{}
+	Command any
 	Index   int
 	Term    int
 }
@@ -24,7 +24,7 @@ const (
 )
 
 type LogEntry struct {
-	Command interface{}
+	Command any
 	Term    int
 }
 
@@ -69,7 +69,7 @@ func (raft *Raft) Report() (id int, term int, isLeader bool) {
 	return raft.id, raft.currentTerm, raft.state == Leader
 }
 
-func (raft *Raft) Submit(command interface{}) bool {
+func (raft *Raft) Submit(command any) bool {
 	raft.mu.Lock()
 	defer raft.mu.Unlock()
 	if raft.state == Leader {

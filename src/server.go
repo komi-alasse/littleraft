@@ -23,7 +23,7 @@ type Server struct {
 	listener    net.Listener
 	commitChan  chan<- Commit
 	peerClients map[int]*rpc.Client
-	quit        chan interface{}
+	quit        chan any
 	wg          sync.WaitGroup
 }
 
@@ -32,7 +32,7 @@ func MakeServer(serverId int, peerIds []int) *Server {
 	s.serverId = serverId
 	s.peerIds = peerIds
 	s.peerClients = make(map[int]*rpc.Client)
-	s.quit = make(chan interface{})
+	s.quit = make(chan any)
 	return s
 }
 
@@ -125,7 +125,7 @@ func (s *Server) DisconnectPeer(peerId int) error {
 	return nil
 }
 
-func (s *Server) Call(id int, serviceMethod string, args interface{}, reply interface{}) error {
+func (s *Server) Call(id int, serviceMethod string, args any, reply any) error {
 	s.mu.Lock()
 	peer := s.peerClients[id]
 	s.mu.Unlock()
